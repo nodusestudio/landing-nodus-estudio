@@ -4,7 +4,12 @@ const navMenu = document.querySelector('.nav-menu');
 const navLinks = document.querySelectorAll('.nav-link');
 const ctaButton = document.querySelector('.cta-button');
 
-// Formulario Dinámico Elements
+// Formulario Dinámico Elements - Inicialización de Variables
+let currentStep = 1;
+let selectedTemplate = '';
+let formData = {};
+
+// Selección de elementos del formulario
 const dynamicForm = document.getElementById('dynamicForm');
 const progressFill = document.getElementById('progressFill');
 const progressSteps = document.querySelectorAll('.progress-step');
@@ -15,77 +20,130 @@ const submitBtn = document.getElementById('submitBtn');
 const templateCards = document.querySelectorAll('.template-card');
 const menuField = document.getElementById('menuField');
 
-let currentStep = 1;
-let selectedTemplate = '';
-let formData = {};
-
-// Actualización de Barra de Progreso
-function updateProgressBar() {
-    if (!progressFill || !progressSteps) return;
+// Función showStep(step) - Control completo de pasos
+function showStep(step) {
+    if (!formSteps || formSteps.length === 0) return;
     
-    // Calcular porcentaje según el paso (33%, 66%, 100%)
+    // Quitar clase active de todos los pasos
+    formSteps.forEach(formStep => {
+        formStep.classList.remove('active');
+    });
+    
+    // Poner clase active solo al paso actual
+    const targetStep = document.querySelector(`[data-step="${step}"]`);
+    if (targetStep) {
+        targetStep.classList.add('active');
+    }
+    
+    // Actualizar círculos de la barra de progreso
+    progressSteps.forEach((progressStep, index) => {
+        const stepNumber = index + 1;
+        progressStep.classList.remove('active', 'completed');
+        
+        if (stepNumber < step) {
+            progressStep.classList.add('completed');
+        } else if (stepNumber === step) {
+            progressStep.classList.add('active');
+        }
+    });
+    
+    // Calcular el ancho del progressFill
     let progressPercentage;
-    switch(currentStep) {
+    switch(step) {
         case 1:
-            progressPercentage = 33.33;
+            progressPercentage = 33;
             break;
         case 2:
-            progressPercentage = 66.66;
+            progressPercentage = 66;
             break;
         case 3:
             progressPercentage = 100;
             break;
         default:
-            progressPercentage = 33.33;
+            progressPercentage = 33;
     }
     
-    // Actualizar el ancho de la barra
-    progressFill.style.width = `${progressPercentage}%`;
+    if (progressFill) {
+        progressFill.style.width = `${progressPercentage}%`;
+    }
     
-    // Actualizar estilos de los círculos de progreso
-    progressSteps.forEach((step, index) => {
-        const stepNumber = index + 1;
-        step.classList.remove('active', 'completed');
-        
-        if (stepNumber < currentStep) {
-            step.classList.add('completed');
-        } else if (stepNumber === currentStep) {
-            step.classList.add('active');
+    // Lógica de Botones
+    if (prevBtn && nextBtn && submitBtn) {
+        // Si es el paso 1, oculta prevBtn
+        if (step === 1) {
+            prevBtn.style.display = 'none';
+        } else {
+            prevBtn.style.display = 'block';
         }
-    });
-}
-
-// Control de Visibilidad de Pasos
-function showStep(step) {
-    if (!formSteps || formSteps.length === 0) return;
-    
-    // Ocultar todos los pasos
-    formSteps.forEach(formStep => {
-        formStep.classList.remove('active', 'slide-in-right', 'slide-in-left');
-        formStep.style.display = 'none';
-    });
-    
-    // Mostrar el paso activo
-    const targetStep = document.querySelector(`[data-step="${step}"]`);
-    if (targetStep) {
-        targetStep.style.display = 'block';
-        targetStep.classList.add('active');
         
-        // Añadir animación según la dirección
-        if (step > currentStep) {
-            targetStep.classList.add('slide-in-right');
-        } else if (step < currentStep) {
-            targetStep.classList.add('slide-in-left');
+        // Si es el paso 3, oculta nextBtn y muestra submitBtn
+        if (step === 3) {
+            nextBtn.style.display = 'none';
+            submitBtn.style.display = 'block';
+        } else {
+            nextBtn.style.display = 'block';
+            submitBtn.style.display = 'none';
         }
     }
     
     currentStep = step;
-    updateProgressBar();
-    updateNavigationButtons();
 }
 
 
 
+// Navegación entre Pasos - Con compatibilidad móvil
+function nextStep() {
+    if (currentStep < 3) {
+        if (validateCurrentStep()) {
+            currentStep++;
+            showStep(currentStep);
+        }
+    }
+}
+
+function prevStep() {
+    if (currentStep > 1) {
+        currentStep--;
+        showStep(currentStep);
+    }
+}
+
+// Selección de Plantilla - Mejorada
+function handleTemplateSelection(template) {
+    selectedTemplate = template;
+    
+    if (!templateCards || templateCards.length === 0) return;
+    
+    // Remover clase 'selected' de todas las tarjetas
+    templateCards.forEach(card => {
+        card.classList.remove('selected');
+    });
+    
+    // Añadir clase 'selected' solo a la tarjeta clickeada
+    const selectedCard = document.querySelector(`[data-template="${template}"]`);
+    if (selectedCard) {
+        selectedCard.classList.add('selected');
+    }
+    
+    // Mostrar campo condicional para restaurante
+    if (menuField) {
+        if (template === 'restaurante') {
+            menuField.style.display = 'block';
+            setTimeout(() => {
+                menuField.classList.add('show');
+            }, 100);
+        } else {
+            menuField.classList.remove('show');
+            setTimeout(() => {
+                menuField.style.display = 'none';
+            }, 300);
+        }
+    }
+    
+    console.log('Plantilla seleccionada:', template);
+}
+
+// Validación de pasos
 function validateCurrentStep() {
     const currentFormStep = document.querySelector(`.form-step[data-step="${currentStep}"]`);
     
@@ -141,6 +199,7 @@ function validateCurrentStep() {
     return true;
 }
 
+// Recolección de datos del formulario
 function collectFormData() {
     formData = {
         tipoProyecto: selectedTemplate,
@@ -157,59 +216,14 @@ function collectFormData() {
     };
 }
 
-// Selección de Plantillas
-function handleTemplateSelection(template) {
-    selectedTemplate = template;
-    
-    if (!templateCards || templateCards.length === 0) return;
-    
-    // Remover clase 'selected' de todas las tarjetas
-    templateCards.forEach(card => {
-        card.classList.remove('selected');
-    });
-    
-    // Añadir clase 'selected' a la tarjeta clickeada
-    const selectedCard = document.querySelector(`[data-template="${template}"]`);
-    if (selectedCard) {
-        selectedCard.classList.add('selected');
-    }
-    
-    // Mostrar campo condicional para restaurante
-    if (menuField) {
-        if (template === 'restaurante') {
-            menuField.style.display = 'block';
-            setTimeout(() => {
-                menuField.classList.add('show');
-            }, 100);
-        } else {
-            menuField.classList.remove('show');
-            setTimeout(() => {
-                menuField.style.display = 'none';
-            }, 300);
-        }
-    }
-    
-    console.log('Plantilla seleccionada:', template);
-}
-
 // Inicialización del Formulario
 function initializeForm() {
     // Resetear variables
     currentStep = 1;
     selectedTemplate = '';
     
-    // Ocultar todos los pasos excepto el primero
-    if (formSteps && formSteps.length > 0) {
-        formSteps.forEach((step, index) => {
-            if (index === 0) {
-                step.style.display = 'block';
-                step.classList.add('active');
-            } else {
-                step.style.display = 'none';
-                step.classList.remove('active');
-            }
-        });
-    }
+    // Mostrar solo el primer paso
+    showStep(1);
     
     // Limpiar selecciones de plantillas
     if (templateCards && templateCards.length > 0) {
@@ -224,48 +238,27 @@ function initializeForm() {
         menuField.classList.remove('show');
     }
     
-    // Actualizar barra de progreso y botones
-    updateProgressBar();
-    updateNavigationButtons();
-    
     console.log('Formulario inicializado correctamente');
 }
 
-// Navegación entre Pasos
+// Navegación entre Pasos - Con compatibilidad móvil
 function nextStep() {
     if (currentStep < 3) {
         if (validateCurrentStep()) {
-            showStep(currentStep + 1);
+            currentStep++;
+            showStep(currentStep);
         }
     }
 }
 
 function prevStep() {
     if (currentStep > 1) {
-        showStep(currentStep - 1);
+        currentStep--;
+        showStep(currentStep);
     }
 }
 
-// Control de Botones de Navegación
-function updateNavigationButtons() {
-    if (!prevBtn || !nextBtn || !submitBtn) return;
-    
-    // Botón Anterior
-    if (currentStep === 1) {
-        prevBtn.style.display = 'none';
-    } else {
-        prevBtn.style.display = 'block';
-    }
-    
-    // Botones Siguiente y Enviar
-    if (currentStep === 3) {
-        nextBtn.style.display = 'none';
-        submitBtn.style.display = 'block';
-    } else {
-        nextBtn.style.display = 'block';
-        submitBtn.style.display = 'none';
-    }
-}
+// Control de Botones de Navegación - Eliminado (funcionalidad integrada en showStep)
 
 function submitForm() {
     if (!validateCurrentStep()) return;
@@ -443,6 +436,18 @@ function throttle(func, wait) {
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
+    // Verificar que los elementos principales existen
+    console.log('Elements found:', {
+        hamburger: !!hamburger,
+        navMenu: !!navMenu,
+        ctaButton: !!ctaButton,
+        dynamicForm: !!dynamicForm,
+        nextBtn: !!nextBtn,
+        prevBtn: !!prevBtn,
+        submitBtn: !!submitBtn,
+        templateCards: templateCards?.length || 0
+    });
+    
     // Mobile navigation
     hamburger?.addEventListener('click', toggleMobileNav);
     
@@ -461,34 +466,66 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Formulario Dinámico Event Listeners
     if (dynamicForm) {
-        // Selección de Plantillas - Event Listeners
+        // Selección de Plantillas - Event Listeners con compatibilidad móvil
         if (templateCards && templateCards.length > 0) {
             templateCards.forEach(card => {
-                card.addEventListener('click', () => {
+                // Evento click
+                card.addEventListener('click', (e) => {
+                    e.preventDefault();
                     const template = card.getAttribute('data-template');
                     handleTemplateSelection(template);
-                    console.log('Plantilla seleccionada:', template);
+                });
+                
+                // Evento touchstart para compatibilidad móvil
+                card.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    const template = card.getAttribute('data-template');
+                    handleTemplateSelection(template);
                 });
             });
         }
         
-        // Navegación - Botón Siguiente
-        nextBtn?.addEventListener('click', (e) => {
-            e.preventDefault();
-            nextStep();
-        });
+        // Navegación - Botón Siguiente con compatibilidad móvil
+        if (nextBtn) {
+            nextBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                nextStep();
+            });
+            
+            nextBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                nextStep();
+            });
+        }
         
-        // Navegación - Botón Anterior
-        prevBtn?.addEventListener('click', (e) => {
-            e.preventDefault();
-            prevStep();
-        });
+        // Navegación - Botón Anterior con compatibilidad móvil
+        if (prevBtn) {
+            prevBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                prevStep();
+            });
+            
+            prevBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                prevStep();
+            });
+        }
+        
+        // Submit Button con compatibilidad móvil
+        if (submitBtn) {
+            submitBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                submitForm();
+            });
+            
+            submitBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                submitForm();
+            });
+        }
         
         // Form submission
         dynamicForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            submitForm();
-        });
             e.preventDefault();
             submitForm();
         });
