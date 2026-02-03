@@ -574,6 +574,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
+    // Inicialización del formulario - CRÍTICO para mostrar contenido
+    initializeForm();
+    
     // Add loading complete class
     setTimeout(() => {
         document.body.classList.add('loaded');
