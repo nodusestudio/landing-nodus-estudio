@@ -389,6 +389,524 @@ body {
     line-height: 1.6;
 }
 
+/* Formulario Dinámico por Pasos */
+.dynamic-form-section {
+    padding: var(--spacing-xl) 0;
+    background: var(--color-bg-tertiary);
+    position: relative;
+    overflow: hidden;
+}
+
+.dynamic-form-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 25% 25%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(0, 153, 204, 0.08) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+    position: relative;
+    z-index: 1;
+}
+
+.form-subtitle {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body);
+    margin-top: var(--spacing-sm);
+}
+
+/* Barra de Progreso */
+.progress-container {
+    margin-bottom: var(--spacing-xl);
+    position: relative;
+    z-index: 1;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 4px;
+    background: var(--color-border);
+    border-radius: 2px;
+    margin-bottom: var(--spacing-md);
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--gradient-neon);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+    width: 33.33%;
+    position: relative;
+}
+
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: shimmer 2s infinite;
+}
+
+.progress-steps {
+    display: flex;
+    justify-content: space-between;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.progress-step {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--color-border);
+    color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    border: 2px solid var(--color-border);
+}
+
+.progress-step.active {
+    background: var(--gradient-neon);
+    color: var(--color-bg);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+}
+
+.progress-step.completed {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+}
+
+/* Formulario */
+.form-container {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.dynamic-form {
+    background: var(--gradient-card);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: var(--spacing-lg);
+    position: relative;
+    overflow: hidden;
+}
+
+.dynamic-form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--gradient-neon);
+    opacity: 0.5;
+}
+
+/* Pasos del Formulario */
+.form-step {
+    display: none;
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+.form-step.active {
+    display: block;
+}
+
+.step-title {
+    font-size: var(--font-size-h3);
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+    color: var(--color-text);
+}
+
+/* Grid de Plantillas */
+.template-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.template-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: var(--spacing-md);
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.template-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--gradient-neon);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.template-card:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+}
+
+.template-card:hover::before {
+    transform: scaleX(1);
+}
+
+.template-card.selected {
+    border-color: var(--color-accent);
+    background: rgba(0, 212, 255, 0.1);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+}
+
+.template-card.selected::before {
+    transform: scaleX(1);
+}
+
+.template-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto var(--spacing-sm);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 212, 255, 0.1);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.template-card:hover .template-icon {
+    background: rgba(0, 212, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.template-card h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+    color: var(--color-text);
+}
+
+.template-card p {
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.4;
+}
+
+.template-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+    justify-content: center;
+}
+
+.template-features span {
+    background: rgba(0, 212, 255, 0.2);
+    color: var(--color-accent);
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+/* Grid del Formulario */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.form-group {
+    position: relative;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    display: block;
+    color: var(--color-text);
+    font-weight: 500;
+    margin-bottom: var(--spacing-xs);
+    font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--color-text);
+    font-family: inherit;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.2);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: var(--color-text-secondary);
+}
+
+/* Checkbox personalizado */
+.checkbox-label {
+    display: flex !important;
+    align-items: center;
+    cursor: pointer;
+    font-size: 1rem !important;
+    margin-bottom: 0 !important;
+}
+
+.checkbox-label input[type="checkbox"] {
+    display: none;
+}
+
+.checkmark {
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    margin-right: var(--spacing-sm);
+    position: relative;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--color-bg);
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Campo condicional */
+.conditional-field {
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.conditional-field.show {
+    opacity: 1;
+}
+
+/* Navegación del Formulario */
+.form-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+}
+
+.nav-btn {
+    background: transparent;
+    border: none;
+    padding: 12px 24px;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text);
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.prev-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.prev-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateX(-2px);
+}
+
+.next-btn,
+.submit-btn {
+    margin-left: auto;
+}
+
+.next-btn .button-border,
+.submit-btn .button-border {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--gradient-neon);
+    border-radius: 8px;
+    padding: 2px;
+    animation: neonPulse 2s ease-in-out infinite;
+}
+
+.next-btn .button-border::before,
+.submit-btn .button-border::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    background: var(--color-bg-tertiary);
+    border-radius: 6px;
+}
+
+.next-btn .button-text,
+.submit-btn .button-text {
+    position: relative;
+    z-index: 2;
+}
+
+.next-btn:hover,
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
+}
+
+/* Animaciones */
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(200%); }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.slide-in-right {
+    animation: slideInRight 0.4s ease forwards;
+}
+
+.slide-in-left {
+    animation: slideInLeft 0.4s ease forwards;
+}
+
+/* Media Queries para el Formulario */
+@media (max-width: 768px) {
+    .template-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .dynamic-form {
+        padding: var(--spacing-md);
+    }
+    
+    .form-navigation {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+    
+    .form-navigation .nav-btn {
+        width: 100%;
+        max-width: 200px;
+    }
+    
+    .progress-steps {
+        max-width: 250px;
+    }
+    
+    .progress-step {
+        width: 35px;
+        height: 35px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .template-card {
+        padding: var(--spacing-sm);
+    }
+    
+    .template-icon {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .dynamic-form {
+        padding: var(--spacing-sm);
+        margin: 0 var(--spacing-xs);
+    }
+}
+
 /* Footer */
 .footer {
     background: var(--color-bg-tertiary);

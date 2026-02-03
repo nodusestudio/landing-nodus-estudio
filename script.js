@@ -4,6 +4,214 @@ const navMenu = document.querySelector('.nav-menu');
 const navLinks = document.querySelectorAll('.nav-link');
 const ctaButton = document.querySelector('.cta-button');
 
+// Formulario Dinámico Elements
+const dynamicForm = document.getElementById('dynamicForm');
+const progressFill = document.getElementById('progressFill');
+const progressSteps = document.querySelectorAll('.progress-step');
+const formSteps = document.querySelectorAll('.form-step');
+const nextBtn = document.getElementById('nextBtn');
+const prevBtn = document.getElementById('prevBtn');
+const submitBtn = document.getElementById('submitBtn');
+const templateCards = document.querySelectorAll('.template-card');
+const menuField = document.getElementById('menuField');
+
+let currentStep = 1;
+let selectedTemplate = '';
+let formData = {};
+
+// Formulario Dinámico Functions
+function updateProgressBar() {
+    if (!progressFill || !progressSteps) return;
+    
+    const progressPercentage = (currentStep / 3) * 100;
+    progressFill.style.width = `${progressPercentage}%`;
+    
+    progressSteps.forEach((step, index) => {
+        const stepNumber = index + 1;
+        step.classList.remove('active', 'completed');
+        
+        if (stepNumber < currentStep) {
+            step.classList.add('completed');
+        } else if (stepNumber === currentStep) {
+            step.classList.add('active');
+        }
+    });
+}
+
+function showStep(step) {
+    if (!formSteps || formSteps.length === 0) return;
+    
+    formSteps.forEach(formStep => {
+        formStep.classList.remove('active', 'slide-in-right', 'slide-in-left');
+    });
+    
+    const targetStep = document.querySelector(`[data-step="${step}"]`);
+    if (targetStep) {
+        targetStep.classList.add('active');
+        if (step > currentStep) {
+            targetStep.classList.add('slide-in-right');
+        } else {
+            targetStep.classList.add('slide-in-left');
+        }
+    }
+    
+    currentStep = step;
+    updateProgressBar();
+    updateNavigationButtons();
+}
+
+function updateNavigationButtons() {
+    if (!prevBtn || !nextBtn || !submitBtn) return;
+    
+    if (currentStep === 1) {
+        prevBtn.style.display = 'none';
+        nextBtn.style.display = 'block';
+        submitBtn.style.display = 'none';
+    } else if (currentStep === 3) {
+        prevBtn.style.display = 'block';
+        nextBtn.style.display = 'none';
+        submitBtn.style.display = 'block';
+    } else {
+        prevBtn.style.display = 'block';
+        nextBtn.style.display = 'block';
+        submitBtn.style.display = 'none';
+    }
+}
+
+function validateCurrentStep() {
+    const currentFormStep = document.querySelector(`.form-step[data-step="${currentStep}"]`);
+    
+    if (currentStep === 1) {
+        // Validar que se haya seleccionado una plantilla
+        if (!selectedTemplate) {
+            alert('Por favor selecciona un tipo de proyecto para continuar.');
+            return false;
+        }
+    } else if (currentStep === 2) {
+        // Validar campos requeridos del paso 2
+        const requiredFields = currentFormStep.querySelectorAll('input[required], select[required]');
+        for (let field of requiredFields) {
+            if (!field.value.trim()) {
+                field.focus();
+                alert('Por favor completa todos los campos requeridos.');
+                return false;
+            }
+        }
+        
+        // Validar email
+        const emailField = document.getElementById('correo');
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(emailField.value)) {
+            emailField.focus();
+            alert('Por favor ingresa un email válido.');
+            return false;
+        }
+    } else if (currentStep === 3) {
+        // Validar campos requeridos del paso 3
+        const requiredFields = currentFormStep.querySelectorAll('input[required], select[required]');
+        for (let field of requiredFields) {
+            if (!field.value.trim()) {
+                field.focus();
+                alert('Por favor completa todos los campos requeridos.');
+                return false;
+            }
+        }
+        
+        // Validar fecha
+        const fechaField = document.getElementById('fechaLanzamiento');
+        const fechaSeleccionada = new Date(fechaField.value);
+        const hoy = new Date();
+        hoy.setHours(0, 0, 0, 0);
+        
+        if (fechaSeleccionada <= hoy) {
+            fechaField.focus();
+            alert('La fecha de lanzamiento debe ser posterior al día de hoy.');
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+function collectFormData() {
+    formData = {
+        tipoProyecto: selectedTemplate,
+        nombre: document.getElementById('nombre').value,
+        empresa: document.getElementById('empresa').value,
+        correo: document.getElementById('correo').value,
+        instagram: document.getElementById('instagram').value,
+        facebook: document.getElementById('facebook').value,
+        tienenLogo: document.getElementById('tienenLogo').checked,
+        menuLink: document.getElementById('menuLink').value,
+        presupuesto: document.getElementById('presupuesto').value,
+        fechaLanzamiento: document.getElementById('fechaLanzamiento').value,
+        comentarios: document.getElementById('comentarios').value
+    };
+}
+
+function handleTemplateSelection(template) {
+    selectedTemplate = template;
+    
+    if (!templateCards || templateCards.length === 0) return;
+    
+    // Actualizar UI
+    templateCards.forEach(card => {
+        card.classList.remove('selected');
+        if (card.dataset.template === template) {
+            card.classList.add('selected');
+        }
+    });
+    
+    // Mostrar campo condicional para restaurante
+    if (menuField) {
+        if (template === 'restaurante') {
+            menuField.style.display = 'block';
+            setTimeout(() => {
+                menuField.classList.add('show');
+            }, 100);
+        } else {
+            menuField.classList.remove('show');
+            setTimeout(() => {
+                menuField.style.display = 'none';
+            }, 300);
+        }
+    }
+}
+
+function submitForm() {
+    if (!validateCurrentStep()) return;
+    
+    collectFormData();
+    
+    // Aquí puedes integrar con tu servicio de email o CRM
+    console.log('Datos del formulario:', formData);
+    
+    if (!submitBtn) return;
+    
+    // Simulación de envío
+    submitBtn.innerHTML = '<span class="button-text">Enviando...</span><div class="button-border"></div>';
+    submitBtn.disabled = true;
+    
+    setTimeout(() => {
+        alert(`¡Gracias ${formData.nombre}! Hemos recibido tu solicitud para el proyecto ${formData.tipoProyecto}. Te contactaremos pronto al correo ${formData.correo}.`);
+        
+        // Reset form
+        if (dynamicForm) {
+            dynamicForm.reset();
+        }
+        currentStep = 1;
+        selectedTemplate = '';
+        
+        if (templateCards && templateCards.length > 0) {
+            templateCards.forEach(card => card.classList.remove('selected'));
+        }
+        
+        showStep(1);
+        submitBtn.innerHTML = '<span class="button-text">Enviar Proyecto</span><div class="button-border"></div>';
+        submitBtn.disabled = false;
+    }, 2000);
+}
+
 // Mobile Navigation Toggle
 function toggleMobileNav() {
     hamburger.classList.toggle('active');
@@ -86,9 +294,9 @@ function handleCTAClick() {
     ctaButton.offsetHeight; // Trigger reflow
     ctaButton.style.animation = 'neonPulse 0.5s ease-out';
     
-    // Simulate form or contact action
+    // Scroll to formulario section
     setTimeout(() => {
-        alert('¡Gracias por tu interés! Te contactaremos pronto.');
+        smoothScrollTo('#formulario');
     }, 300);
 }
 
@@ -162,6 +370,66 @@ document.addEventListener('DOMContentLoaded', () => {
     // CTA button
     ctaButton?.addEventListener('click', handleCTAClick);
     
+    // Formulario Dinámico Event Listeners
+    if (dynamicForm) {
+        // Template selection
+        if (templateCards && templateCards.length > 0) {
+            templateCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    handleTemplateSelection(card.dataset.template);
+                });
+            });
+        }
+        
+        // Navigation buttons
+        nextBtn?.addEventListener('click', () => {
+            if (validateCurrentStep()) {
+                if (currentStep < 3) {
+                    showStep(currentStep + 1);
+                }
+            }
+        });
+        
+        prevBtn?.addEventListener('click', () => {
+            if (currentStep > 1) {
+                showStep(currentStep - 1);
+            }
+        });
+        
+        // Form submission
+        dynamicForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            submitForm();
+        });
+        
+        // Smooth focus effects for form inputs
+        const formInputs = dynamicForm.querySelectorAll('input, select, textarea');
+        if (formInputs && formInputs.length > 0) {
+            formInputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    input.parentElement?.classList.add('focused');
+                });
+                
+                input.addEventListener('blur', () => {
+                    input.parentElement?.classList.remove('focused');
+                });
+            });
+        }
+        
+        // Set minimum date for launch date
+        const fechaLanzamiento = document.getElementById('fechaLanzamiento');
+        if (fechaLanzamiento) {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const minDate = tomorrow.toISOString().split('T')[0];
+            fechaLanzamiento.setAttribute('min', minDate);
+        }
+        
+        // Initialize form
+        updateProgressBar();
+        updateNavigationButtons();
+    }
+    
     // Initialize observers and effects
     observeElements();
     addMouseMoveEffect();
@@ -184,15 +452,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.add('loaded');
     }, 100);
 });
-
-// Service worker registration for PWA capabilities (optional)
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-            .then(() => console.log('SW registered'))
-            .catch(() => console.log('SW registration failed'));
-    });
-}
 
 // Custom cursor effect (optional enhancement)
 function initCustomCursor() {
