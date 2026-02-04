@@ -208,7 +208,7 @@ function submitForm(e) {
         mensaje += `\n💬 *Comentarios adicionales:*\n${comentarios}\n`;
     }
     
-    mensaje += `\nme puedes ampl iar la información sobre este proyecto? ¡Gracias! 🙌`;
+    mensaje += `\n¿Me podrías ampliar la información sobre este proyecto? ¡Gracias! 🙌`;
     
     // **NÚMERO DE TELÉFONO DE NODUS**
     const numeroWhatsApp = '573052433816'; // Tu número de WhatsApp
