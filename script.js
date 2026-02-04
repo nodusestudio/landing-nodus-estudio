@@ -445,7 +445,16 @@ document.addEventListener('DOMContentLoaded', () => {
         nextBtn: !!nextBtn,
         prevBtn: !!prevBtn,
         submitBtn: !!submitBtn,
-        templateCards: templateCards?.length || 0
+        templateCards: templateCards?.length || 0,
+        formSteps: formSteps?.length || 0
+    });
+    
+    // Debug específico para móviles
+    console.log('Device info:', {
+        isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+        touchSupport: 'ontouchstart' in window,
+        screenWidth: window.screen.width,
+        viewportWidth: window.innerWidth
     });
     
     // Mobile navigation
@@ -469,59 +478,61 @@ document.addEventListener('DOMContentLoaded', () => {
         // Selección de Plantillas - Event Listeners con compatibilidad móvil
         if (templateCards && templateCards.length > 0) {
             templateCards.forEach(card => {
-                // Evento click
-                card.addEventListener('click', (e) => {
-                    e.preventDefault();
+                // Función unificada para manejar selección
+                const handleSelection = (e) => {
                     const template = card.getAttribute('data-template');
                     handleTemplateSelection(template);
-                });
+                };
                 
-                // Evento touchstart para compatibilidad móvil
-                card.addEventListener('touchstart', (e) => {
+                // Evento click
+                card.addEventListener('click', handleSelection);
+                
+                // Evento touchend para mejor respuesta móvil
+                card.addEventListener('touchend', (e) => {
                     e.preventDefault();
-                    const template = card.getAttribute('data-template');
-                    handleTemplateSelection(template);
-                });
+                    handleSelection(e);
+                }, { passive: false });
+                
+                // Mejorar interacción táctil
+                card.style.touchAction = 'manipulation';
+                card.style.webkitTapHighlightColor = 'transparent';
             });
         }
         
         // Navegación - Botón Siguiente con compatibilidad móvil
         if (nextBtn) {
-            nextBtn.addEventListener('click', (e) => {
+            const handleNext = (e) => {
                 e.preventDefault();
                 nextStep();
-            });
+            };
             
-            nextBtn.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                nextStep();
-            });
+            nextBtn.addEventListener('click', handleNext);
+            nextBtn.addEventListener('touchend', handleNext, { passive: false });
+            nextBtn.style.touchAction = 'manipulation';
         }
         
         // Navegación - Botón Anterior con compatibilidad móvil
         if (prevBtn) {
-            prevBtn.addEventListener('click', (e) => {
+            const handlePrev = (e) => {
                 e.preventDefault();
                 prevStep();
-            });
+            };
             
-            prevBtn.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                prevStep();
-            });
+            prevBtn.addEventListener('click', handlePrev);
+            prevBtn.addEventListener('touchend', handlePrev, { passive: false });
+            prevBtn.style.touchAction = 'manipulation';
         }
         
         // Submit Button con compatibilidad móvil
         if (submitBtn) {
-            submitBtn.addEventListener('click', (e) => {
+            const handleSubmit = (e) => {
                 e.preventDefault();
                 submitForm();
-            });
+            };
             
-            submitBtn.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                submitForm();
-            });
+            submitBtn.addEventListener('click', handleSubmit);
+            submitBtn.addEventListener('touchend', handleSubmit, { passive: false });
+            submitBtn.style.touchAction = 'manipulation';
         }
         
         // Form submission
