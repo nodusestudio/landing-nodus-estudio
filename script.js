@@ -20,83 +20,126 @@ const submitBtn = document.getElementById('submitBtn');
 const templateCards = document.querySelectorAll('.template-card');
 const menuField = document.getElementById('menuField');
 
-// Función showStep(step) - EMERGENCY SIMPLIFIED
+// Función showStep(step) - RADICAL RECONSTRUCTION
 function showStep(step) {
-    console.log('EMERGENCY showStep called with step:', step);
+    console.log('RADICAL showStep called with step:', step);
     
     if (!formSteps || formSteps.length === 0) {
         console.log('ERROR: formSteps not found');
         return;
     }
     
-    // FUERZA BRUTA: Ocultar todos los pasos
-    formSteps.forEach((formStep, index) => {
-        formStep.style.display = 'none';
-        formStep.style.opacity = '0';
-        formStep.style.visibility = 'hidden';
-        formStep.classList.remove('active');
-        console.log(`Step ${index + 1} hidden`);
-    });
+    // Limpiar completamente el contenido actual
+    const dynamicFormContainer = document.querySelector('.dynamic-form');
+    if (!dynamicFormContainer) {
+        console.log('ERROR: dynamic-form not found');
+        return;
+    }
     
-    // FUERZA BRUTA: Mostrar solo el paso activo
-    const targetStep = document.querySelector(`[data-step="${step}"]`);
-    if (targetStep) {
-        console.log('Target step found:', step);
+    // RECONSTRUIR EL CONTENIDO COMPLETAMENTE
+    if (step === 1) {
+        dynamicFormContainer.innerHTML = `
+            <div class="form-step active" data-step="1" style="display: block !important; opacity: 1 !important; visibility: visible !important;">
+                <h3 class="step-title" style="display: block !important; opacity: 1 !important; visibility: visible !important; color: white !important; font-size: 1.5rem !important; text-align: center !important; margin-bottom: 2rem !important;">
+                    ¿Qué tipo de proyecto necesitas?
+                </h3>
+                <div class="template-grid" style="display: grid !important; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important; gap: 2rem !important; margin-bottom: 2rem !important; opacity: 1 !important; visibility: visible !important;">
+                    <div class="template-card" data-template="restaurante" style="display: block !important; opacity: 1 !important; visibility: visible !important; background: rgba(255, 255, 255, 0.1) !important; border: 2px solid rgba(255, 255, 255, 0.2) !important; border-radius: 16px !important; padding: 2rem !important; cursor: pointer !important; min-height: 200px !important;">
+                        <div class="template-icon" style="display: block !important; opacity: 1 !important; visibility: visible !important; text-align: center !important; margin-bottom: 1rem !important;">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color: #00d4ff !important;">
+                                <path d="M12 2L13.09 8.26L19 9L13.09 9.74L12 16L10.91 9.74L5 9L10.91 8.26L12 2Z"/>
+                            </svg>
+                        </div>
+                        <h4 style="display: block !important; opacity: 1 !important; visibility: visible !important; color: white !important; font-size: 1.2rem !important; margin-bottom: 1rem !important; text-align: center !important;">Restaurante</h4>
+                        <p style="display: block !important; opacity: 1 !important; visibility: visible !important; color: #b0b0b0 !important; text-align: center !important; margin-bottom: 1rem !important;">Landing page para restaurantes, bares y servicios gastronómicos</p>
+                        <div class="template-features" style="display: flex !important; gap: 0.5rem !important; justify-content: center !important; flex-wrap: wrap !important; opacity: 1 !important; visibility: visible !important;">
+                            <span style="display: inline-block !important; background: rgba(0, 212, 255, 0.2) !important; color: #00d4ff !important; padding: 0.25rem 0.5rem !important; border-radius: 4px !important; font-size: 0.8rem !important;">Menú Digital</span>
+                            <span style="display: inline-block !important; background: rgba(0, 212, 255, 0.2) !important; color: #00d4ff !important; padding: 0.25rem 0.5rem !important; border-radius: 4px !important; font-size: 0.8rem !important;">Reservas Online</span>
+                            <span style="display: inline-block !important; background: rgba(0, 212, 255, 0.2) !important; color: #00d4ff !important; padding: 0.25rem 0.5rem !important; border-radius: 4px !important; font-size: 0.8rem !important;">Galería</span>
+                        </div>
+                    </div>
+                    
+                    <div class="template-card" data-template="ecommerce" style="display: block !important; opacity: 1 !important; visibility: visible !important; background: rgba(255, 255, 255, 0.1) !important; border: 2px solid rgba(255, 255, 255, 0.2) !important; border-radius: 16px !important; padding: 2rem !important; cursor: pointer !important; min-height: 200px !important;">
+                        <div class="template-icon" style="display: block !important; opacity: 1 !important; visibility: visible !important; text-align: center !important; margin-bottom: 1rem !important;">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color: #00d4ff !important;">
+                                <path d="M9 22C9.55228 22 10 21.5523 10 21C10 20.4477 9.55228 20 9 20C8.44772 20 8 20.4477 8 21C8 21.5523 8.44772 22 9 22Z"/>
+                                <path d="M1 1H5L7.68 14.39C7.77144 14.8504 8.02191 15.264 8.38755 15.5583C8.75318 15.8526 9.2107 16.009 9.68 16H19.4C19.8693 16.009 20.3268 15.8526 20.6925 15.5583C21.0581 15.264 21.3086 14.8504 21.4 14.39L23 6H6"/>
+                            </svg>
+                        </div>
+                        <h4 style="display: block !important; opacity: 1 !important; visibility: visible !important; color: white !important; font-size: 1.2rem !important; margin-bottom: 1rem !important; text-align: center !important;">E-commerce</h4>
+                        <p style="display: block !important; opacity: 1 !important; visibility: visible !important; color: #b0b0b0 !important; text-align: center !important; margin-bottom: 1rem !important;">Tienda online completa con carrito de compras y pagos</p>
+                        <div class="template-features" style="display: flex !important; gap: 0.5rem !important; justify-content: center !important; flex-wrap: wrap !important; opacity: 1 !important; visibility: visible !important;">
+                            <span style="display: inline-block !important; background: rgba(0, 212, 255, 0.2) !important; color: #00d4ff !important; padding: 0.25rem 0.5rem !important; border-radius: 4px !important; font-size: 0.8rem !important;">Catálogo</span>
+                            <span style="display: inline-block !important; background: rgba(0, 212, 255, 0.2) !important; color: #00d4ff !important; padding: 0.25rem 0.5rem !important; border-radius: 4px !important; font-size: 0.8rem !important;">Carrito</span>
+                            <span style="display: inline-block !important; background: rgba(0, 212, 255, 0.2) !important; color: #00d4ff !important; padding: 0.25rem 0.5rem !important; border-radius: 4px !important; font-size: 0.8rem !important;">Pagos</span>
+                        </div>
+                    </div>
+                    
+                    <div class="template-card" data-template="tienda" style="display: block !important; opacity: 1 !important; visibility: visible !important; background: rgba(255, 255, 255, 0.1) !important; border: 2px solid rgba(255, 255, 255, 0.2) !important; border-radius: 16px !important; padding: 2rem !important; cursor: pointer !important; min-height: 200px !important;">
+                        <div class="template-icon" style="display: block !important; opacity: 1 !important; visibility: visible !important; text-align: center !important; margin-bottom: 1rem !important;">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color: #00d4ff !important;">
+                                <path d="M3 7V5C3 3.89543 3.89543 3 5 3H19C20.1046 3 21 3.89543 21 5V7"/>
+                                <path d="M3 7C3 8.10457 3.89543 9 5 9C6.10457 9 7 8.10457 7 7C7 8.10457 7.89543 9 9 9C10.1046 9 11 8.10457 11 7C11 8.10457 11.8954 9 13 9C14.1046 9 15 8.10457 15 7C15 8.10457 15.8954 9 17 9C18.1046 9 19 8.10457 19 7C19 8.10457 19.8954 9 21 7V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V7Z"/>
+                            </svg>
+                        </div>
+                        <h4 style="display: block !important; opacity: 1 !important; visibility: visible !important; color: white !important; font-size: 1.2rem !important; margin-bottom: 1rem !important; text-align: center !important;">Tienda/Negocio</h4>
+                        <p style="display: block !important; opacity: 1 !important; visibility: visible !important; color: #b0b0b0 !important; text-align: center !important; margin-bottom: 1rem !important;">Sitio web corporativo para mostrar productos y servicios</p>
+                        <div class="template-features" style="display: flex !important; gap: 0.5rem !important; justify-content: center !important; flex-wrap: wrap !important; opacity: 1 !important; visibility: visible !important;">
+                            <span style="display: inline-block !important; background: rgba(0, 212, 255, 0.2) !important; color: #00d4ff !important; padding: 0.25rem 0.5rem !important; border-radius: 4px !important; font-size: 0.8rem !important;">Portafolio</span>
+                            <span style="display: inline-block !important; background: rgba(0, 212, 255, 0.2) !important; color: #00d4ff !important; padding: 0.25rem 0.5rem !important; border-radius: 4px !important; font-size: 0.8rem !important;">Contacto</span>
+                            <span style="display: inline-block !important; background: rgba(0, 212, 255, 0.2) !important; color: #00d4ff !important; padding: 0.25rem 0.5rem !important; border-radius: 4px !important; font-size: 0.8rem !important;">Testimonios</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Navegación del Formulario -->
+            <div class="form-navigation" style="display: flex !important; justify-content: space-between !important; align-items: center !important; margin-top: 2rem !important;">
+                <button type="button" id="prevBtn" class="nav-btn prev-btn" style="display: none !important;">
+                    <span class="button-text">← Anterior</span>
+                </button>
+                
+                <button type="button" id="nextBtn" class="nav-btn next-btn" style="display: block !important; background: linear-gradient(45deg, #00d4ff, #0099cc) !important; border: none !important; color: white !important; padding: 1rem 2rem !important; border-radius: 8px !important; cursor: pointer !important; font-size: 1rem !important;">
+                    <span class="button-text">Siguiente →</span>
+                </button>
+                
+                <button type="submit" id="submitBtn" class="nav-btn submit-btn" style="display: none !important;">
+                    <span class="button-text">Enviar Proyecto</span>
+                </button>
+            </div>
+        `;
         
-        // Aplicar estilos directamente
-        targetStep.style.display = 'block';
-        targetStep.style.opacity = '1';
-        targetStep.style.visibility = 'visible';
-        targetStep.style.height = 'auto';
-        targetStep.style.maxHeight = 'none';
-        targetStep.style.overflow = 'visible';
-        targetStep.style.position = 'static';
-        targetStep.style.zIndex = '20';
-        targetStep.style.width = '100%';
-        targetStep.style.padding = '2rem';
-        targetStep.classList.add('active');
-        
-        // Forzar todos los elementos hijos
-        const allElements = targetStep.querySelectorAll('*');
-        allElements.forEach(el => {
-            el.style.opacity = '1';
-            el.style.visibility = 'visible';
-            if (el.tagName === 'DIV' && el.className.includes('template')) {
-                el.style.display = 'block';
-            }
+        // Reestablecer event listeners para las nuevas template cards
+        const newTemplateCards = dynamicFormContainer.querySelectorAll('.template-card');
+        newTemplateCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const template = card.getAttribute('data-template');
+                handleTemplateSelection(template);
+            });
+            
+            card.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                const template = card.getAttribute('data-template');
+                handleTemplateSelection(template);
+            });
         });
         
-        // Específicamente para template-grid
-        const templateGrid = targetStep.querySelector('.template-grid');
-        if (templateGrid) {
-            templateGrid.style.display = 'grid';
-            templateGrid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(250px, 1fr))';
-            templateGrid.style.gap = '2rem';
-            templateGrid.style.opacity = '1';
-            templateGrid.style.visibility = 'visible';
-            console.log('Template grid forced visible');
-            
-            // Forzar template cards
-            const cards = templateGrid.querySelectorAll('.template-card');
-            cards.forEach((card, i) => {
-                card.style.display = 'block';
-                card.style.opacity = '1';
-                card.style.visibility = 'visible';
-                card.style.background = 'rgba(255, 255, 255, 0.1)';
-                card.style.border = '2px solid rgba(255, 255, 255, 0.2)';
-                card.style.borderRadius = '16px';
-                card.style.padding = '2rem';
-                card.style.minHeight = '200px';
-                console.log(`Template card ${i + 1} forced visible`);
+        // Reestablecer event listeners para botones
+        const newNextBtn = dynamicFormContainer.querySelector('#nextBtn');
+        const newPrevBtn = dynamicFormContainer.querySelector('#prevBtn');
+        const newSubmitBtn = dynamicFormContainer.querySelector('#submitBtn');
+        
+        if (newNextBtn) {
+            newNextBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                nextStep();
             });
         }
         
-        console.log('Step', step, 'successfully shown');
-    } else {
-        console.log('ERROR: Target step not found for step:', step);
+        console.log('RADICAL RECONSTRUCTION: Step 1 rebuilt successfully');
     }
     
-    // Resto de la lógica de progreso...
+    // Actualizar progreso y botones
     if (progressSteps) {
         progressSteps.forEach((progressStep, index) => {
             const stepNumber = index + 1;
@@ -113,18 +156,6 @@ function showStep(step) {
     if (progressFill) {
         let progressPercentage = step === 1 ? 33 : step === 2 ? 66 : 100;
         progressFill.style.width = `${progressPercentage}%`;
-    }
-    
-    // Botones
-    if (prevBtn && nextBtn && submitBtn) {
-        prevBtn.style.display = step === 1 ? 'none' : 'block';
-        if (step === 3) {
-            nextBtn.style.display = 'none';
-            submitBtn.style.display = 'block';
-        } else {
-            nextBtn.style.display = 'block';
-            submitBtn.style.display = 'none';
-        }
     }
     
     currentStep = step;
