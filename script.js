@@ -33,6 +33,45 @@ function showStep(step) {
     const targetStep = document.querySelector(`[data-step="${step}"]`);
     if (targetStep) {
         targetStep.classList.add('active');
+        
+        // FORZAR VISIBILIDAD CRÍTICA
+        targetStep.style.display = 'block';
+        targetStep.style.opacity = '1';
+        targetStep.style.visibility = 'visible';
+        targetStep.style.height = 'auto';
+        targetStep.style.maxHeight = 'none';
+        targetStep.style.overflow = 'visible';
+        
+        // Forzar visibilidad de elementos internos
+        const stepTitle = targetStep.querySelector('.step-title');
+        const templateGrid = targetStep.querySelector('.template-grid');
+        const formGrid = targetStep.querySelector('.form-grid');
+        
+        if (stepTitle) {
+            stepTitle.style.display = 'block';
+            stepTitle.style.opacity = '1';
+            stepTitle.style.visibility = 'visible';
+        }
+        
+        if (templateGrid) {
+            templateGrid.style.display = 'grid';
+            templateGrid.style.opacity = '1';
+            templateGrid.style.visibility = 'visible';
+            
+            // Forzar visibilidad de template cards
+            const templateCards = templateGrid.querySelectorAll('.template-card');
+            templateCards.forEach(card => {
+                card.style.display = 'block';
+                card.style.opacity = '1';
+                card.style.visibility = 'visible';
+            });
+        }
+        
+        if (formGrid) {
+            formGrid.style.display = 'grid';
+            formGrid.style.opacity = '1';
+            formGrid.style.visibility = 'visible';
+        }
     }
     
     // Actualizar círculos de la barra de progreso
@@ -87,6 +126,9 @@ function showStep(step) {
     }
     
     currentStep = step;
+    
+    console.log('showStep ejecutado para paso:', step);
+    console.log('targetStep encontrado:', !!targetStep);
 }
 
 
