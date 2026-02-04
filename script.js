@@ -20,102 +20,104 @@ const submitBtn = document.getElementById('submitBtn');
 const templateCards = document.querySelectorAll('.template-card');
 const menuField = document.getElementById('menuField');
 
-// Función showStep(step) - Control completo de pasos
+// Función showStep(step) - EMERGENCY SIMPLIFIED
 function showStep(step) {
-    if (!formSteps || formSteps.length === 0) return;
+    console.log('EMERGENCY showStep called with step:', step);
     
-    // Quitar clase active de todos los pasos
-    formSteps.forEach(formStep => {
+    if (!formSteps || formSteps.length === 0) {
+        console.log('ERROR: formSteps not found');
+        return;
+    }
+    
+    // FUERZA BRUTA: Ocultar todos los pasos
+    formSteps.forEach((formStep, index) => {
+        formStep.style.display = 'none';
+        formStep.style.opacity = '0';
+        formStep.style.visibility = 'hidden';
         formStep.classList.remove('active');
+        console.log(`Step ${index + 1} hidden`);
     });
     
-    // Poner clase active solo al paso actual
+    // FUERZA BRUTA: Mostrar solo el paso activo
     const targetStep = document.querySelector(`[data-step="${step}"]`);
     if (targetStep) {
-        targetStep.classList.add('active');
+        console.log('Target step found:', step);
         
-        // FORZAR VISIBILIDAD CRÍTICA
+        // Aplicar estilos directamente
         targetStep.style.display = 'block';
         targetStep.style.opacity = '1';
         targetStep.style.visibility = 'visible';
         targetStep.style.height = 'auto';
         targetStep.style.maxHeight = 'none';
         targetStep.style.overflow = 'visible';
+        targetStep.style.position = 'static';
+        targetStep.style.zIndex = '20';
+        targetStep.style.width = '100%';
+        targetStep.style.padding = '2rem';
+        targetStep.classList.add('active');
         
-        // Forzar visibilidad de elementos internos
-        const stepTitle = targetStep.querySelector('.step-title');
+        // Forzar todos los elementos hijos
+        const allElements = targetStep.querySelectorAll('*');
+        allElements.forEach(el => {
+            el.style.opacity = '1';
+            el.style.visibility = 'visible';
+            if (el.tagName === 'DIV' && el.className.includes('template')) {
+                el.style.display = 'block';
+            }
+        });
+        
+        // Específicamente para template-grid
         const templateGrid = targetStep.querySelector('.template-grid');
-        const formGrid = targetStep.querySelector('.form-grid');
-        
-        if (stepTitle) {
-            stepTitle.style.display = 'block';
-            stepTitle.style.opacity = '1';
-            stepTitle.style.visibility = 'visible';
-        }
-        
         if (templateGrid) {
             templateGrid.style.display = 'grid';
+            templateGrid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(250px, 1fr))';
+            templateGrid.style.gap = '2rem';
             templateGrid.style.opacity = '1';
             templateGrid.style.visibility = 'visible';
+            console.log('Template grid forced visible');
             
-            // Forzar visibilidad de template cards
-            const templateCards = templateGrid.querySelectorAll('.template-card');
-            templateCards.forEach(card => {
+            // Forzar template cards
+            const cards = templateGrid.querySelectorAll('.template-card');
+            cards.forEach((card, i) => {
                 card.style.display = 'block';
                 card.style.opacity = '1';
                 card.style.visibility = 'visible';
+                card.style.background = 'rgba(255, 255, 255, 0.1)';
+                card.style.border = '2px solid rgba(255, 255, 255, 0.2)';
+                card.style.borderRadius = '16px';
+                card.style.padding = '2rem';
+                card.style.minHeight = '200px';
+                console.log(`Template card ${i + 1} forced visible`);
             });
         }
         
-        if (formGrid) {
-            formGrid.style.display = 'grid';
-            formGrid.style.opacity = '1';
-            formGrid.style.visibility = 'visible';
-        }
+        console.log('Step', step, 'successfully shown');
+    } else {
+        console.log('ERROR: Target step not found for step:', step);
     }
     
-    // Actualizar círculos de la barra de progreso
-    progressSteps.forEach((progressStep, index) => {
-        const stepNumber = index + 1;
-        progressStep.classList.remove('active', 'completed');
-        
-        if (stepNumber < step) {
-            progressStep.classList.add('completed');
-        } else if (stepNumber === step) {
-            progressStep.classList.add('active');
-        }
-    });
-    
-    // Calcular el ancho del progressFill
-    let progressPercentage;
-    switch(step) {
-        case 1:
-            progressPercentage = 33;
-            break;
-        case 2:
-            progressPercentage = 66;
-            break;
-        case 3:
-            progressPercentage = 100;
-            break;
-        default:
-            progressPercentage = 33;
+    // Resto de la lógica de progreso...
+    if (progressSteps) {
+        progressSteps.forEach((progressStep, index) => {
+            const stepNumber = index + 1;
+            progressStep.classList.remove('active', 'completed');
+            
+            if (stepNumber < step) {
+                progressStep.classList.add('completed');
+            } else if (stepNumber === step) {
+                progressStep.classList.add('active');
+            }
+        });
     }
     
     if (progressFill) {
+        let progressPercentage = step === 1 ? 33 : step === 2 ? 66 : 100;
         progressFill.style.width = `${progressPercentage}%`;
     }
     
-    // Lógica de Botones
+    // Botones
     if (prevBtn && nextBtn && submitBtn) {
-        // Si es el paso 1, oculta prevBtn
-        if (step === 1) {
-            prevBtn.style.display = 'none';
-        } else {
-            prevBtn.style.display = 'block';
-        }
-        
-        // Si es el paso 3, oculta nextBtn y muestra submitBtn
+        prevBtn.style.display = step === 1 ? 'none' : 'block';
         if (step === 3) {
             nextBtn.style.display = 'none';
             submitBtn.style.display = 'block';
@@ -126,9 +128,6 @@ function showStep(step) {
     }
     
     currentStep = step;
-    
-    console.log('showStep ejecutado para paso:', step);
-    console.log('targetStep encontrado:', !!targetStep);
 }
 
 
@@ -258,14 +257,31 @@ function collectFormData() {
     };
 }
 
-// Inicialización del Formulario
+// Inicialización del Formulario - EMERGENCY
 function initializeForm() {
+    console.log('EMERGENCY initializeForm called');
+    
     // Resetear variables
     currentStep = 1;
     selectedTemplate = '';
     
-    // Mostrar solo el primer paso
-    showStep(1);
+    console.log('Form steps found:', formSteps?.length);
+    console.log('Template cards found:', templateCards?.length);
+    
+    // FUERZA DIRECTA - Mostrar paso 1 inmediatamente
+    setTimeout(() => {
+        showStep(1);
+        
+        // Asegurar que el primer paso esté visible por si acaso
+        const firstStep = document.querySelector('[data-step="1"]');
+        if (firstStep) {
+            console.log('First step found, forcing visibility...');
+            firstStep.style.display = 'block';
+            firstStep.style.opacity = '1';
+            firstStep.style.visibility = 'visible';
+            firstStep.classList.add('active');
+        }
+    }, 100);
     
     // Limpiar selecciones de plantillas
     if (templateCards && templateCards.length > 0) {
@@ -280,7 +296,7 @@ function initializeForm() {
         menuField.classList.remove('show');
     }
     
-    console.log('Formulario inicializado correctamente');
+    console.log('EMERGENCY initializeForm completed');
 }
 
 // Navegación entre Pasos - Con compatibilidad móvil
