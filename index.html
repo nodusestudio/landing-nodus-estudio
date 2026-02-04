@@ -106,8 +106,8 @@
         </div>
     </section>
 
-    <!-- Formulario Dinámico por Pasos -->
-    <section id="formulario" class="dynamic-form-section">
+    <!-- Formulario Dinámico por Pasos - NUEVO DESDE CERO -->
+    <section id="formulario" class="project-form-section">
         <div class="container">
             <div class="form-header">
                 <h2 class="section-title">Comienza tu <span class="neon-text">Proyecto</span></h2>
@@ -126,57 +126,41 @@
                 </div>
             </div>
 
-            <!-- Formulario -->
-            <div class="form-container">
-                <form id="dynamicForm" class="dynamic-form">
+            <!-- Formulario Limpio -->
+            <div class="project-form-container">
+                <form id="projectForm" class="multi-step-form">
                     
-                    <!-- Paso 1: Selección de Plantilla -->
-                    <div class="form-step active" data-step="1">
+                    <!-- PASO 1: SELECCIÓN DE PROYECTO -->
+                    <div class="step-content active" id="step-1">
                         <h3 class="step-title">¿Qué tipo de proyecto necesitas?</h3>
-                        <div class="template-grid">
-                            <div class="template-card" data-template="restaurante">
-                                <div class="template-icon">
-                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                        <path d="M12 2L13.09 8.26L19 9L13.09 9.74L12 16L10.91 9.74L5 9L10.91 8.26L12 2Z"/>
-                                        <path d="M12 16L10.91 22.26L5 23L10.91 23.74L12 30"/>
-                                    </svg>
-                                </div>
+                        <div class="project-options">
+                            <div class="project-card" data-project="restaurante">
+                                <div class="project-icon">🍽️</div>
                                 <h4>Restaurante</h4>
-                                <p>Landing page para restaurantes, bares y servicios gastronómicos</p>
-                                <div class="template-features">
+                                <p>Landing page para restaurantes y servicios gastronómicos</p>
+                                <div class="features">
                                     <span>Menú Digital</span>
-                                    <span>Reservas Online</span>
+                                    <span>Reservas</span>
                                     <span>Galería</span>
                                 </div>
                             </div>
                             
-                            <div class="template-card" data-template="ecommerce">
-                                <div class="template-icon">
-                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                        <path d="M9 22C9.55228 22 10 21.5523 10 21C10 20.4477 9.55228 20 9 20C8.44772 20 8 20.4477 8 21C8 21.5523 8.44772 22 9 22Z"/>
-                                        <path d="M20 22C20.5523 22 21 21.5523 21 21C21 20.4477 20.5523 20 20 20C19.4477 20 19 20.4477 19 21C19 21.5523 19.4477 22 20 22Z"/>
-                                        <path d="M1 1H5L7.68 14.39C7.77144 14.8504 8.02191 15.264 8.38755 15.5583C8.75318 15.8526 9.2107 16.009 9.68 16H19.4C19.8693 16.009 20.3268 15.8526 20.6925 15.5583C21.0581 15.264 21.3086 14.8504 21.4 14.39L23 6H6"/>
-                                    </svg>
-                                </div>
+                            <div class="project-card" data-project="ecommerce">
+                                <div class="project-icon">🛒</div>
                                 <h4>E-commerce</h4>
-                                <p>Tienda online completa con carrito de compras y pagos</p>
-                                <div class="template-features">
+                                <p>Tienda online con carrito y pagos</p>
+                                <div class="features">
                                     <span>Catálogo</span>
                                     <span>Carrito</span>
                                     <span>Pagos</span>
                                 </div>
                             </div>
                             
-                            <div class="template-card" data-template="tienda">
-                                <div class="template-icon">
-                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                        <path d="M3 7V5C3 3.89543 3.89543 3 5 3H19C20.1046 3 21 3.89543 21 5V7"/>
-                                        <path d="M3 7C3 8.10457 3.89543 9 5 9C6.10457 9 7 8.10457 7 7C7 8.10457 7.89543 9 9 9C10.1046 9 11 8.10457 11 7C11 8.10457 11.8954 9 13 9C14.1046 9 15 8.10457 15 7C15 8.10457 15.8954 9 17 9C18.1046 9 19 8.10457 19 7C19 8.10457 19.8954 9 21 7V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V7Z"/>
-                                    </svg>
-                                </div>
-                                <h4>Tienda/Negocio</h4>
-                                <p>Sitio web corporativo para mostrar productos y servicios</p>
-                                <div class="template-features">
+                            <div class="project-card" data-project="negocio">
+                                <div class="project-icon">🏢</div>
+                                <h4>Negocio/Servicio</h4>
+                                <p>Sitio corporativo para mostrar servicios</p>
+                                <div class="features">
                                     <span>Portafolio</span>
                                     <span>Contacto</span>
                                     <span>Testimonios</span>
@@ -185,56 +169,47 @@
                         </div>
                     </div>
 
-                    <!-- Paso 2: Identidad -->
-                    <div class="form-step" data-step="2">
+                    <!-- PASO 2: DATOS PERSONALES -->
+                    <div class="step-content" id="step-2">
                         <h3 class="step-title">Cuéntanos sobre tu marca</h3>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="nombre">Nombre *</label>
+                        <div class="form-fields">
+                            <div class="field-group">
+                                <label for="nombre">Nombre Completo *</label>
                                 <input type="text" id="nombre" name="nombre" required>
                             </div>
                             
-                            <div class="form-group">
+                            <div class="field-group">
                                 <label for="empresa">Empresa/Marca *</label>
                                 <input type="text" id="empresa" name="empresa" required>
                             </div>
                             
-                            <div class="form-group full-width">
-                                <label for="correo">Correo Electrónico *</label>
-                                <input type="email" id="correo" name="correo" required>
+                            <div class="field-group">
+                                <label for="email">Correo Electrónico *</label>
+                                <input type="email" id="email" name="email" required>
                             </div>
                             
-                            <div class="form-group">
+                            <div class="field-group">
+                                <label for="telefono">Teléfono</label>
+                                <input type="tel" id="telefono" name="telefono">
+                            </div>
+                            
+                            <div class="field-group">
                                 <label for="instagram">Instagram</label>
-                                <input type="text" id="instagram" name="instagram" placeholder="@tuinstagram">
+                                <input type="text" id="instagram" name="instagram" placeholder="@tu_cuenta">
                             </div>
                             
-                            <div class="form-group">
-                                <label for="facebook">Facebook</label>
-                                <input type="text" id="facebook" name="facebook" placeholder="facebook.com/tupagina">
-                            </div>
-                            
-                            <div class="form-group full-width">
-                                <label class="checkbox-label">
-                                    <input type="checkbox" id="tienenLogo" name="tienenLogo">
-                                    <span class="checkmark"></span>
-                                    Ya tenemos logo diseñado
-                                </label>
-                            </div>
-                            
-                            <!-- Campo condicional para restaurante -->
-                            <div class="form-group full-width conditional-field" id="menuField" style="display: none;">
-                                <label for="menuLink">Link de Menú Actual (opcional)</label>
-                                <input type="url" id="menuLink" name="menuLink" placeholder="https://...">
+                            <div class="field-group">
+                                <label for="sitio_actual">¿Tienes sitio web actual?</label>
+                                <input type="url" id="sitio_actual" name="sitio_actual" placeholder="https://...">
                             </div>
                         </div>
                     </div>
 
-                    <!-- Paso 3: Presupuesto y Timeline -->
-                    <div class="form-step" data-step="3">
+                    <!-- PASO 3: PRESUPUESTO Y TIMELINE -->
+                    <div class="step-content" id="step-3">
                         <h3 class="step-title">Detalles del proyecto</h3>
-                        <div class="form-grid">
-                            <div class="form-group full-width">
+                        <div class="form-fields">
+                            <div class="field-group">
                                 <label for="presupuesto">Rango de Inversión *</label>
                                 <select id="presupuesto" name="presupuesto" required>
                                     <option value="">Selecciona un rango</option>
@@ -245,32 +220,36 @@
                                 </select>
                             </div>
                             
-                            <div class="form-group full-width">
-                                <label for="fechaLanzamiento">Fecha de Lanzamiento Deseada *</label>
-                                <input type="date" id="fechaLanzamiento" name="fechaLanzamiento" required>
+                            <div class="field-group">
+                                <label for="timeline">¿Cuándo necesitas el proyecto? *</label>
+                                <select id="timeline" name="timeline" required>
+                                    <option value="">Selecciona un plazo</option>
+                                    <option value="1-2-semanas">1-2 semanas</option>
+                                    <option value="1-mes">1 mes</option>
+                                    <option value="2-3-meses">2-3 meses</option>
+                                    <option value="flexible">Soy flexible</option>
+                                </select>
                             </div>
                             
-                            <div class="form-group full-width">
-                                <label for="comentarios">Comentarios Adicionales</label>
+                            <div class="field-group">
+                                <label for="comentarios">Comentarios adicionales</label>
                                 <textarea id="comentarios" name="comentarios" rows="4" placeholder="Cuéntanos más detalles sobre tu visión..."></textarea>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Navegación del Formulario -->
+                    <!-- NAVEGACIÓN -->
                     <div class="form-navigation">
-                        <button type="button" id="prevBtn" class="nav-btn prev-btn" style="display: none;">
-                            <span class="button-text">← Anterior</span>
+                        <button type="button" id="prevButton" class="nav-button prev-button" disabled>
+                            ← Anterior
                         </button>
                         
-                        <button type="button" id="nextBtn" class="nav-btn next-btn">
-                            <span class="button-text">Siguiente →</span>
-                            <div class="button-border"></div>
+                        <button type="button" id="nextButton" class="nav-button next-button">
+                            Siguiente →
                         </button>
                         
-                        <button type="submit" id="submitBtn" class="nav-btn submit-btn" style="display: none;">
-                            <span class="button-text">Enviar Proyecto</span>
-                            <div class="button-border"></div>
+                        <button type="submit" id="submitButton" class="nav-button submit-button" style="display: none;">
+                            Enviar Proyecto
                         </button>
                     </div>
                 </form>

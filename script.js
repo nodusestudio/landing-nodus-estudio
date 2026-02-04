@@ -1,269 +1,200 @@
-// DOM Elements
+// ====== FORMULARIO DE PROYECTO - COMPLETAMENTE NUEVO ======
+
+// Variables principales
+let currentStep = 1;
+let selectedProject = '';
+let formData = {};
+
+// Referencias DOM
+const form = document.getElementById('projectForm');
+const progressFill = document.getElementById('progressFill');
+const progressSteps = document.querySelectorAll('.progress-step');
+const stepContents = document.querySelectorAll('.step-content');
+const prevButton = document.getElementById('prevButton');
+const nextButton = document.getElementById('nextButton');
+const submitButton = document.getElementById('submitButton');
+
+// Navegación móvil
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-menu');
 const navLinks = document.querySelectorAll('.nav-link');
 const ctaButton = document.querySelector('.cta-button');
 
-// Formulario Dinámico Elements - Inicialización de Variables
-let currentStep = 1;
-let selectedTemplate = '';
-let formData = {};
+// ====== FUNCIONES PRINCIPALES ======
 
-// Selección de elementos del formulario - VARIABLES MUTABLES
-const dynamicForm = document.getElementById('dynamicForm');
-const progressFill = document.getElementById('progressFill');
-const progressSteps = document.querySelectorAll('.progress-step');
-let formSteps = document.querySelectorAll('.form-step');
-let nextBtn = document.getElementById('nextBtn');
-let prevBtn = document.getElementById('prevBtn');
-let submitBtn = document.getElementById('submitBtn');
-let templateCards = document.querySelectorAll('.template-card');
-const menuField = document.getElementById('menuField');
-
-// Función showStep(step) - VERSION SIMPLE Y ESTABLE
-function showStep(step) {
-    console.log('🔄 showStep called with step:', step);
-    
-    // Obtener todos los form steps actualizados
-    const currentFormSteps = document.querySelectorAll('.form-step');
-    
-    if (!currentFormSteps || currentFormSteps.length === 0) {
-        console.log('❌ ERROR: No form steps found');
-        return;
-    }
+function showStep(stepNumber) {
+    console.log(`📍 Mostrando paso ${stepNumber}`);
     
     // Ocultar todos los pasos
-    currentFormSteps.forEach(formStep => {
-        formStep.style.display = 'none';
-        formStep.classList.remove('active');
+    stepContents.forEach(step => {
+        step.classList.remove('active');
     });
     
-    // Mostrar el paso actual
-    const activeStep = document.querySelector(`[data-step="${step}"]`);
+    // Mostrar paso actual
+    const activeStep = document.getElementById(`step-${stepNumber}`);
     if (activeStep) {
-        activeStep.style.display = 'block';
         activeStep.classList.add('active');
-        console.log('✅ Step', step, 'is now active');
-    } else {
-        console.log('❌ ERROR: Step', step, 'not found');
-        return;
     }
+    
+    // Actualizar barra de progreso
+    const progressWidth = (stepNumber / 3) * 100;
+    progressFill.style.width = `${progressWidth}%`;
+    
+    // Actualizar steps indicator
+    progressSteps.forEach((step, index) => {
+        const stepNum = index + 1;
+        step.classList.remove('active', 'completed');
+        
+        if (stepNum < stepNumber) {
+            step.classList.add('completed');
+        } else if (stepNum === stepNumber) {
+            step.classList.add('active');
+        }
+    });
     
     // Manejar visibilidad de botones
-    const currentNextBtn = document.getElementById('nextBtn');
-    const currentPrevBtn = document.getElementById('prevBtn');
-    const currentSubmitBtn = document.getElementById('submitBtn');
+    prevButton.style.display = stepNumber > 1 ? 'block' : 'block';
+    prevButton.disabled = stepNumber === 1;
     
-    if (currentPrevBtn) {
-        currentPrevBtn.style.display = step > 1 ? 'inline-flex' : 'none';
-    }
+    nextButton.style.display = stepNumber < 3 ? 'block' : 'none';
+    submitButton.style.display = stepNumber === 3 ? 'block' : 'none';
     
-    if (currentNextBtn) {
-        currentNextBtn.style.display = step < 3 ? 'inline-flex' : 'none';
-    }
-    
-    if (currentSubmitBtn) {
-        currentSubmitBtn.style.display = step === 3 ? 'inline-flex' : 'none';
-    }
-
-    // Actualizar progreso
-    if (progressSteps) {
-        progressSteps.forEach((progressStep, index) => {
-            const stepNumber = index + 1;
-            progressStep.classList.remove('active', 'completed');
-            
-            if (stepNumber < step) {
-                progressStep.classList.add('completed');
-            } else if (stepNumber === step) {
-                progressStep.classList.add('active');
-            }
-        });
-    }
-
-    if (progressFill) {
-        let progressPercentage = step === 1 ? 33 : step === 2 ? 66 : 100;
-        progressFill.style.width = `${progressPercentage}%`;
-    }
-
-    currentStep = step;
+    currentStep = stepNumber;
 }
 
-// Navegación entre Pasos - Con compatibilidad móvil
 function nextStep() {
-    console.log('🔄 nextStep called, current step:', currentStep);
+    console.log(`➡️ Intentando avanzar desde paso ${currentStep}`);
     
-    // Agregar feedback visual al botón
-    if (nextBtn) {
-        nextBtn.style.transform = 'scale(0.95)';
-        setTimeout(() => {
-            nextBtn.style.transform = 'scale(1)';
-        }, 150);
-    }
-    
-    if (currentStep < 3) {
-        console.log('🔍 Validating current step...');
-        if (validateCurrentStep()) {
-            console.log('✅ Validation passed, moving to step:', currentStep + 1);
-            currentStep++;
-            showStep(currentStep);
-        } else {
-            console.log('❌ Validation failed for step:', currentStep);
+    if (validateStep(currentStep)) {
+        if (currentStep < 3) {
+            showStep(currentStep + 1);
         }
-    } else {
-        console.log('⚠️ Already at last step');
     }
 }
 
 function prevStep() {
-    console.log('⬅️ prevStep called, current step:', currentStep);
-    
-    // Agregar feedback visual al botón
-    if (prevBtn) {
-        prevBtn.style.transform = 'scale(0.95)';
-        setTimeout(() => {
-            prevBtn.style.transform = 'scale(1)';
-        }, 150);
-    }
+    console.log(`⬅️ Retrocediendo desde paso ${currentStep}`);
     
     if (currentStep > 1) {
-        currentStep--;
-        showStep(currentStep);
+        showStep(currentStep - 1);
     }
 }
 
-// Validación de campos
-function validateCurrentStep() {
-    console.log('validateCurrentStep called for step:', currentStep);
+function validateStep(stepNum) {
+    console.log(`🔍 Validando paso ${stepNum}`);
     
-    if (currentStep === 1) {
-        // Validar que se haya seleccionado una plantilla
-        if (!selectedTemplate) {
+    if (stepNum === 1) {
+        if (!selectedProject) {
             alert('Por favor selecciona un tipo de proyecto para continuar.');
             return false;
         }
-        console.log('Step 1 validation passed, template:', selectedTemplate);
+        console.log(`✅ Paso 1 válido - Proyecto: ${selectedProject}`);
         return true;
     }
     
-    // Para otros pasos, buscar el form step actual
-    const currentFormStep = document.querySelector(`[data-step="${currentStep}"]`);
-    if (!currentFormStep) {
-        console.log('No form step found for step:', currentStep);
-        return false;
-    }
-    
-    if (currentStep === 2) {
-        // Validar campos requeridos del paso 2
-        const requiredFields = currentFormStep.querySelectorAll('input[required], select[required]');
-        for (let field of requiredFields) {
-            if (!field.value.trim()) {
-                field.focus();
-                alert('Por favor completa todos los campos requeridos.');
+    if (stepNum === 2) {
+        const requiredFields = ['nombre', 'empresa', 'email'];
+        
+        for (const fieldId of requiredFields) {
+            const field = document.getElementById(fieldId);
+            if (!field || !field.value.trim()) {
+                alert(`Por favor completa el campo: ${field ? field.previousElementSibling.textContent : fieldId}`);
+                if (field) field.focus();
                 return false;
             }
         }
         
         // Validar email
-        const emailField = document.getElementById('correo');
-        if (emailField) {
-            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailPattern.test(emailField.value)) {
-                emailField.focus();
-                alert('Por favor ingresa un email válido.');
-                return false;
-            }
+        const email = document.getElementById('email').value;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            alert('Por favor ingresa un email válido.');
+            document.getElementById('email').focus();
+            return false;
         }
-    } else if (currentStep === 3) {
-        // Validar campos requeridos del paso 3
-        const requiredFields = currentFormStep.querySelectorAll('input[required], select[required]');
-        for (let field of requiredFields) {
-            if (!field.value.trim()) {
-                field.focus();
-                alert('Por favor completa todos los campos requeridos.');
+        
+        console.log('✅ Paso 2 válido');
+        return true;
+    }
+    
+    if (stepNum === 3) {
+        const requiredFields = ['presupuesto', 'timeline'];
+        
+        for (const fieldId of requiredFields) {
+            const field = document.getElementById(fieldId);
+            if (!field || !field.value.trim()) {
+                alert(`Por favor completa el campo: ${field ? field.previousElementSibling.textContent : fieldId}`);
+                if (field) field.focus();
                 return false;
             }
         }
         
-        // Validar fecha
-        const fechaField = document.getElementById('fechaLanzamiento');
-        if (fechaField && fechaField.value) {
-            const fechaSeleccionada = new Date(fechaField.value);
-            const hoy = new Date();
-            hoy.setHours(0, 0, 0, 0);
-            
-            if (fechaSeleccionada <= hoy) {
-                fechaField.focus();
-                alert('La fecha de lanzamiento debe ser posterior al día de hoy.');
-                return false;
-            }
-        }
+        console.log('✅ Paso 3 válido');
+        return true;
     }
     
-    console.log('Validation passed for step:', currentStep);
     return true;
 }
 
-// Selección de Plantilla - Mejorada
-function handleTemplateSelection(template) {
-    console.log('🎯 Template selected:', template);
+function selectProject(projectType) {
+    console.log(`🎯 Proyecto seleccionado: ${projectType}`);
     
-    selectedTemplate = template;
-    
-    // Actualizar estilos visuales de las cards
-    const allCards = document.querySelectorAll('.template-card');
-    allCards.forEach(card => {
+    // Remover selección anterior
+    document.querySelectorAll('.project-card').forEach(card => {
         card.classList.remove('selected');
-        if (card.dataset.template === template) {
-            card.classList.add('selected');
-            card.style.border = '2px solid #00d4ff';
-            card.style.backgroundColor = 'rgba(0, 212, 255, 0.1)';
-        } else {
-            card.style.border = '2px solid rgba(255, 255, 255, 0.2)';
-            card.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-        }
     });
     
-    // Mostrar campo adicional para restaurantes
-    if (menuField) {
-        menuField.style.display = template === 'restaurante' ? 'block' : 'none';
+    // Seleccionar nuevo proyecto
+    const selectedCard = document.querySelector(`[data-project="${projectType}"]`);
+    if (selectedCard) {
+        selectedCard.classList.add('selected');
+        selectedProject = projectType;
     }
-    
-    console.log('✅ Template selection completed');
 }
 
-// Envío del formulario
-function submitForm() {
-    console.log('📤 Submitting form...');
+function submitForm(e) {
+    e.preventDefault();
+    console.log('📤 Enviando formulario...');
     
-    if (!validateCurrentStep()) {
-        console.log('❌ Final validation failed');
+    if (!validateStep(3)) {
         return;
     }
     
-    // Recopilar todos los datos del formulario
-    const formDataToSend = new FormData(dynamicForm);
-    formDataToSend.append('plantilla', selectedTemplate);
+    // Recopilar datos del formulario
+    const formData = new FormData(form);
+    formData.append('proyecto', selectedProject);
     
-    console.log('✅ Form data ready for submission');
-    alert(`¡Gracias! Tu proyecto de ${selectedTemplate} ha sido enviado. Te contactaremos pronto.`);
+    // Mostrar datos (aquí normalmente enviarías a un servidor)
+    console.log('📋 Datos del formulario:');
+    for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+    }
+    
+    // Simulación de envío exitoso
+    alert(`¡Perfecto! Tu solicitud para un proyecto de ${selectedProject} ha sido enviada. Nos pondremos en contacto contigo pronto.`);
+    
+    // Opcional: resetear formulario
+    // form.reset();
+    // selectedProject = '';
+    // showStep(1);
 }
 
-// Navegación móvil
 function toggleMobileMenu() {
     navMenu.classList.toggle('active');
     hamburger.classList.toggle('active');
 }
 
-// Event Listeners - Configuración inicial
+// ====== EVENT LISTENERS ======
+
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 DOM Content Loaded - Initializing form');
+    console.log('🚀 Inicializando formulario de proyecto');
     
-    // Event listeners para navegación móvil
+    // Navegación móvil
     if (hamburger) {
         hamburger.addEventListener('click', toggleMobileMenu);
     }
     
-    // Event listeners para navegación suave
+    // Navegación suave
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
@@ -284,7 +215,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Event listener para el CTA button
+    // CTA button
     if (ctaButton) {
         ctaButton.addEventListener('click', function(e) {
             e.preventDefault();
@@ -295,174 +226,34 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Event listeners para template cards
-    if (templateCards) {
-        templateCards.forEach(card => {
-            // CRÍTICO: Forzar estilos de visibilidad
-            card.style.display = 'block';
-            card.style.opacity = '1';
-            card.style.visibility = 'visible';
-            card.style.position = 'relative';
-            card.style.zIndex = '1000';
-            
-            card.addEventListener('click', function() {
-                const template = this.dataset.template;
-                handleTemplateSelection(template);
-            });
-            
-            // Compatibilidad móvil
-            card.addEventListener('touchend', function(e) {
-                e.preventDefault();
-                const template = this.dataset.template;
-                handleTemplateSelection(template);
-            });
+    // Selección de proyecto
+    document.querySelectorAll('.project-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const projectType = this.getAttribute('data-project');
+            selectProject(projectType);
         });
+    });
+    
+    // Botones de navegación
+    if (nextButton) {
+        nextButton.addEventListener('click', nextStep);
     }
     
-    // Event listeners para botones de navegación
-    if (nextBtn) {
-        nextBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            console.log('📱 Next button clicked');
-            nextStep();
-        });
-        
-        nextBtn.addEventListener('touchend', function(e) {
-            e.preventDefault();
-            console.log('📱 Next button touched');
-            nextStep();
-        });
+    if (prevButton) {
+        prevButton.addEventListener('click', prevStep);
     }
     
-    if (prevBtn) {
-        prevBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            console.log('📱 Prev button clicked');
-            prevStep();
-        });
+    if (submitButton) {
+        submitButton.addEventListener('click', submitForm);
     }
     
-    if (submitBtn) {
-        submitBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            console.log('📱 Submit button clicked');
-            submitForm();
-        });
+    // Prevenir envío por defecto del formulario
+    if (form) {
+        form.addEventListener('submit', submitForm);
     }
     
-    // Inicializar el formulario en el paso 1
+    // Inicializar en paso 1
     showStep(1);
     
-    // CRÍTICO: Forzar visibilidad después de inicializar
-    setTimeout(() => {
-        console.log('🔧 Forcing template cards visibility...');
-        
-        // Forzar visibilidad de toda la sección del formulario
-        const formSection = document.querySelector('#formulario');
-        const formContainer = document.querySelector('.form-container');
-        const dynamicForm = document.querySelector('.dynamic-form');
-        const step1 = document.querySelector('[data-step="1"]');
-        const templateGrid = document.querySelector('.template-grid');
-        const allTemplateCards = document.querySelectorAll('.template-card');
-        
-        if (formSection) {
-            formSection.style.display = 'block';
-            formSection.style.opacity = '1';
-            formSection.style.visibility = 'visible';
-        }
-        
-        if (formContainer) {
-            formContainer.style.display = 'block';
-            formContainer.style.opacity = '1';
-            formContainer.style.visibility = 'visible';
-        }
-        
-        if (dynamicForm) {
-            dynamicForm.style.display = 'block';
-            dynamicForm.style.opacity = '1';
-            dynamicForm.style.visibility = 'visible';
-        }
-        
-        if (step1) {
-            step1.style.display = 'block';
-            step1.style.opacity = '1';
-            step1.style.visibility = 'visible';
-            step1.classList.add('active');
-        }
-        
-        if (templateGrid) {
-            templateGrid.style.display = 'grid';
-            templateGrid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(250px, 1fr))';
-            templateGrid.style.gap = '2rem';
-            templateGrid.style.opacity = '1';
-            templateGrid.style.visibility = 'visible';
-            templateGrid.style.zIndex = '1000';
-        }
-        
-        allTemplateCards.forEach(card => {
-            card.style.display = 'block';
-            card.style.opacity = '1';
-            card.style.visibility = 'visible';
-            card.style.position = 'relative';
-            card.style.zIndex = '1001';
-            card.style.background = 'rgba(255, 255, 255, 0.1)';
-            card.style.border = '2px solid rgba(255, 255, 255, 0.2)';
-            card.style.borderRadius = '16px';
-            card.style.padding = '2rem';
-            card.style.cursor = 'pointer';
-            card.style.minHeight = '200px';
-            
-            // Forzar visibilidad de elementos internos
-            const title = card.querySelector('h4');
-            const desc = card.querySelector('p');
-            const icon = card.querySelector('.template-icon');
-            const features = card.querySelector('.template-features');
-            
-            if (title) {
-                title.style.display = 'block';
-                title.style.opacity = '1';
-                title.style.visibility = 'visible';
-                title.style.color = 'white';
-            }
-            
-            if (desc) {
-                desc.style.display = 'block';
-                desc.style.opacity = '1';
-                desc.style.visibility = 'visible';
-                desc.style.color = '#b0b0b0';
-            }
-            
-            if (icon) {
-                icon.style.display = 'block';
-                icon.style.opacity = '1';
-                icon.style.visibility = 'visible';
-            }
-            
-            if (features) {
-                features.style.display = 'flex';
-                features.style.opacity = '1';
-                features.style.visibility = 'visible';
-                features.style.gap = '0.5rem';
-                features.style.justifyContent = 'center';
-                features.style.flexWrap = 'wrap';
-                
-                const spans = features.querySelectorAll('span');
-                spans.forEach(span => {
-                    span.style.display = 'inline-block';
-                    span.style.opacity = '1';
-                    span.style.visibility = 'visible';
-                    span.style.background = 'rgba(0, 212, 255, 0.2)';
-                    span.style.color = '#00d4ff';
-                    span.style.padding = '0.25rem 0.5rem';
-                    span.style.borderRadius = '4px';
-                });
-            }
-        });
-        
-        console.log('✅ Template cards visibility forced!');
-        console.log(`Found ${allTemplateCards.length} template cards`);
-        
-    }, 100);
-    
-    console.log('✅ Form initialization completed');
+    console.log('✅ Formulario inicializado correctamente');
 });
