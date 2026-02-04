@@ -5,6 +5,38 @@
     box-sizing: border-box;
 }
 
+/* CRÍTICO: FORZAR VISIBILIDAD TOTAL DE TEMPLATE CARDS */
+.dynamic-form-section,
+.dynamic-form-section *,
+.form-container,
+.form-container *,
+.dynamic-form,
+.dynamic-form *,
+.form-step[data-step="1"],
+.form-step[data-step="1"] *,
+.template-grid,
+.template-grid *,
+.template-card,
+.template-card * {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    position: relative !important;
+    z-index: 1000 !important;
+}
+
+.template-grid {
+    display: grid !important;
+}
+
+.template-card .template-features span {
+    display: inline-block !important;
+}
+
+.form-navigation {
+    display: flex !important;
+}
+
 :root {
     /* Paleta de colores */
     --color-bg: #0a0a0a;

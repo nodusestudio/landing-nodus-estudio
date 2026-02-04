@@ -298,6 +298,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Event listeners para template cards
     if (templateCards) {
         templateCards.forEach(card => {
+            // CRÍTICO: Forzar estilos de visibilidad
+            card.style.display = 'block';
+            card.style.opacity = '1';
+            card.style.visibility = 'visible';
+            card.style.position = 'relative';
+            card.style.zIndex = '1000';
+            
             card.addEventListener('click', function() {
                 const template = this.dataset.template;
                 handleTemplateSelection(template);
@@ -345,6 +352,117 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Inicializar el formulario en el paso 1
     showStep(1);
+    
+    // CRÍTICO: Forzar visibilidad después de inicializar
+    setTimeout(() => {
+        console.log('🔧 Forcing template cards visibility...');
+        
+        // Forzar visibilidad de toda la sección del formulario
+        const formSection = document.querySelector('#formulario');
+        const formContainer = document.querySelector('.form-container');
+        const dynamicForm = document.querySelector('.dynamic-form');
+        const step1 = document.querySelector('[data-step="1"]');
+        const templateGrid = document.querySelector('.template-grid');
+        const allTemplateCards = document.querySelectorAll('.template-card');
+        
+        if (formSection) {
+            formSection.style.display = 'block';
+            formSection.style.opacity = '1';
+            formSection.style.visibility = 'visible';
+        }
+        
+        if (formContainer) {
+            formContainer.style.display = 'block';
+            formContainer.style.opacity = '1';
+            formContainer.style.visibility = 'visible';
+        }
+        
+        if (dynamicForm) {
+            dynamicForm.style.display = 'block';
+            dynamicForm.style.opacity = '1';
+            dynamicForm.style.visibility = 'visible';
+        }
+        
+        if (step1) {
+            step1.style.display = 'block';
+            step1.style.opacity = '1';
+            step1.style.visibility = 'visible';
+            step1.classList.add('active');
+        }
+        
+        if (templateGrid) {
+            templateGrid.style.display = 'grid';
+            templateGrid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(250px, 1fr))';
+            templateGrid.style.gap = '2rem';
+            templateGrid.style.opacity = '1';
+            templateGrid.style.visibility = 'visible';
+            templateGrid.style.zIndex = '1000';
+        }
+        
+        allTemplateCards.forEach(card => {
+            card.style.display = 'block';
+            card.style.opacity = '1';
+            card.style.visibility = 'visible';
+            card.style.position = 'relative';
+            card.style.zIndex = '1001';
+            card.style.background = 'rgba(255, 255, 255, 0.1)';
+            card.style.border = '2px solid rgba(255, 255, 255, 0.2)';
+            card.style.borderRadius = '16px';
+            card.style.padding = '2rem';
+            card.style.cursor = 'pointer';
+            card.style.minHeight = '200px';
+            
+            // Forzar visibilidad de elementos internos
+            const title = card.querySelector('h4');
+            const desc = card.querySelector('p');
+            const icon = card.querySelector('.template-icon');
+            const features = card.querySelector('.template-features');
+            
+            if (title) {
+                title.style.display = 'block';
+                title.style.opacity = '1';
+                title.style.visibility = 'visible';
+                title.style.color = 'white';
+            }
+            
+            if (desc) {
+                desc.style.display = 'block';
+                desc.style.opacity = '1';
+                desc.style.visibility = 'visible';
+                desc.style.color = '#b0b0b0';
+            }
+            
+            if (icon) {
+                icon.style.display = 'block';
+                icon.style.opacity = '1';
+                icon.style.visibility = 'visible';
+            }
+            
+            if (features) {
+                features.style.display = 'flex';
+                features.style.opacity = '1';
+                features.style.visibility = 'visible';
+                features.style.gap = '0.5rem';
+                features.style.justifyContent = 'center';
+                features.style.flexWrap = 'wrap';
+                
+                const spans = features.querySelectorAll('span');
+                spans.forEach(span => {
+                    span.style.display = 'inline-block';
+                    span.style.opacity = '1';
+                    span.style.visibility = 'visible';
+                    span.style.background = 'rgba(0, 212, 255, 0.2)';
+                    span.style.color = '#00d4ff';
+                    span.style.padding = '0.25rem 0.5rem';
+                    span.style.borderRadius = '4px';
+                });
+            }
+        });
+        
+        console.log('✅ Template cards visibility forced!');
+        console.log(`Found ${allTemplateCards.length} template cards`);
+        
+    }, 100);
     
     console.log('✅ Form initialization completed');
 });
