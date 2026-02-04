@@ -173,10 +173,27 @@ function submitForm(e) {
     // Simulación de envío exitoso
     alert(`¡Perfecto! Tu solicitud para un proyecto de ${selectedProject} ha sido enviada. Nos pondremos en contacto contigo pronto.`);
     
-    // Opcional: resetear formulario
-    // form.reset();
-    // selectedProject = '';
-    // showStep(1);
+    // NUEVO: Resetear formulario y volver al inicio
+    form.reset();
+    selectedProject = '';
+    
+    // Remover selección de project cards
+    document.querySelectorAll('.project-card').forEach(card => {
+        card.classList.remove('selected');
+    });
+    
+    // Volver al paso 1
+    showStep(1);
+    
+    // Scroll suave al inicio de la página
+    setTimeout(() => {
+        const inicioSection = document.querySelector('#inicio');
+        if (inicioSection) {
+            inicioSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, 500);
+    
+    console.log('✅ Formulario enviado y reseteado');
 }
 
 function toggleMobileMenu() {

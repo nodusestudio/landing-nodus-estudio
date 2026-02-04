@@ -203,12 +203,30 @@
     transition: all 0.3s ease;
 }
 
+/* FIX ESPECÍFICO PARA SELECT - FONDO GRIS PARA VISIBILIDAD */
+.field-group select {
+    background: rgba(128, 128, 128, 0.8) !important;
+    color: #000000 !important;
+    font-weight: 500;
+}
+
+.field-group select option {
+    background: rgba(128, 128, 128, 0.9) !important;
+    color: #000000 !important;
+    padding: 0.5rem;
+}
+
 .field-group input:focus,
 .field-group select:focus,
 .field-group textarea:focus {
     outline: none;
     border-color: var(--color-accent);
     box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.2);
+}
+
+/* FIX PARA SELECT EN FOCUS */
+.field-group select:focus {
+    background: rgba(160, 160, 160, 0.9) !important;
 }
 
 .field-group input::placeholder,
