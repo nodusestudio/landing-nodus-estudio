@@ -160,20 +160,67 @@ function submitForm(e) {
         return;
     }
     
-    // Recopilar datos del formulario
-    const formData = new FormData(form);
-    formData.append('proyecto', selectedProject);
+    // **CAPTURA DE DATOS PARA WHATSAPP**
+    // Obtener valores de todos los campos
+    const nombre = document.getElementById('nombre').value.trim();
+    const empresa = document.getElementById('empresa').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const telefono = document.getElementById('telefono').value.trim();
+    const instagram = document.getElementById('instagram').value.trim();
+    const sitioActual = document.getElementById('sitio_actual').value.trim();
+    const presupuesto = document.getElementById('presupuesto').value;
+    const timeline = document.getElementById('timeline').value;
+    const comentarios = document.getElementById('comentarios').value.trim();
+    const plantilla = selectedProject;
     
-    // Mostrar datos (aquí normalmente enviarías a un servidor)
-    console.log('📋 Datos del formulario:');
-    for (let [key, value] of formData.entries()) {
-        console.log(`${key}: ${value}`);
+    // **FORMATO DEL MENSAJE PROFESIONAL**
+    let mensaje = `¡Hola Nodus! 👋\n\n`;
+    mensaje += `Mi nombre es *${nombre}* de la marca *${empresa}*.\n`;
+    mensaje += `Me interesa el paquete de *${plantilla}*.\n\n`;
+    mensaje += `📊 *Detalles del proyecto:*\n`;
+    mensaje += `• Presupuesto: ${presupuesto}\n`;
+    mensaje += `• Timeline: ${timeline}\n`;
+    mensaje += `• Email: ${email}\n`;
+    
+    if (telefono) {
+        mensaje += `• Teléfono: ${telefono}\n`;
     }
     
-    // Simulación de envío exitoso
-    alert(`¡Perfecto! Tu solicitud para un proyecto de ${selectedProject} ha sido enviada. Nos pondremos en contacto contigo pronto.`);
+    if (instagram) {
+        mensaje += `• Instagram: ${instagram}\n`;
+    }
     
-    // NUEVO: Resetear formulario y volver al inicio
+    if (sitioActual) {
+        mensaje += `• Sitio actual: ${sitioActual}\n`;
+    }
+    
+    if (comentarios) {
+        mensaje += `\n💬 *Comentarios adicionales:*\n${comentarios}\n`;
+    }
+    
+    mensaje += `\n¿Podemos coordinar una llamada para discutir los detalles?`;
+    
+    // **NÚMERO DE TELÉFONO DE NODUS**
+    const numeroWhatsApp = '573052433816'; // Tu número de WhatsApp
+    
+    // **CODIFICACIÓN Y ENLACE A WHATSAPP**
+    const mensajeCodificado = encodeURIComponent(mensaje);
+    const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensajeCodificado}`;
+    
+    console.log('📋 Datos capturados para WhatsApp:');
+    console.log('Nombre:', nombre);
+    console.log('Empresa:', empresa);
+    console.log('Proyecto:', plantilla);
+    console.log('Presupuesto:', presupuesto);
+    console.log('URL WhatsApp:', urlWhatsApp);
+    
+    // **REDIRECCIÓN A WHATSAPP**
+    window.open(urlWhatsApp, '_blank');
+    
+    // Mensaje de confirmación
+    alert(`¡Perfecto! Serás redirigido a WhatsApp para enviar tu solicitud de ${plantilla}. ¡Nos pondremos en contacto contigo pronto!`);
+    
+    // **RESETEAR FORMULARIO Y VOLVER AL INICIO**
     form.reset();
     selectedProject = '';
     
@@ -200,7 +247,7 @@ function submitForm(e) {
         }
     }, 300);
     
-    console.log('✅ Formulario enviado y reseteado');
+    console.log('✅ Formulario enviado por WhatsApp y reseteado');
 }
 
 function toggleMobileMenu() {
