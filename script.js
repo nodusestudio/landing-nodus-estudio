@@ -185,13 +185,20 @@ function submitForm(e) {
     // Volver al paso 1
     showStep(1);
     
+    // OCULTAR FORMULARIO Y VOLVER AL INICIO
+    const formularioSection = document.querySelector('#formulario');
+    if (formularioSection) {
+        formularioSection.classList.add('hidden');
+        formularioSection.classList.remove('show');
+    }
+    
     // Scroll suave al inicio de la página
     setTimeout(() => {
         const inicioSection = document.querySelector('#inicio');
         if (inicioSection) {
             inicioSection.scrollIntoView({ behavior: 'smooth' });
         }
-    }, 500);
+    }, 300);
     
     console.log('✅ Formulario enviado y reseteado');
 }
@@ -232,13 +239,21 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // CTA button
+    // CTA button - MOSTRAR FORMULARIO AL HACER CLIC
     if (ctaButton) {
         ctaButton.addEventListener('click', function(e) {
             e.preventDefault();
+            
+            // Mostrar el formulario
             const formularioSection = document.querySelector('#formulario');
             if (formularioSection) {
-                formularioSection.scrollIntoView({ behavior: 'smooth' });
+                formularioSection.classList.remove('hidden');
+                formularioSection.classList.add('show');
+                
+                // Scroll suave al formulario después de un pequeño delay
+                setTimeout(() => {
+                    formularioSection.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
             }
         });
     }
