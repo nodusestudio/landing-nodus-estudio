@@ -68,6 +68,11 @@ function nextStep() {
     if (validateStep(currentStep)) {
         if (currentStep < 3) {
             showStep(currentStep + 1);
+            // Scroll suave hacia la parte superior del formulario
+            const formularioSection = document.querySelector('#formulario');
+            if (formularioSection) {
+                formularioSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }
     }
 }
@@ -77,6 +82,11 @@ function prevStep() {
     
     if (currentStep > 1) {
         showStep(currentStep - 1);
+        // Scroll suave hacia la parte superior del formulario
+        const formularioSection = document.querySelector('#formulario');
+        if (formularioSection) {
+            formularioSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     }
 }
 
@@ -198,7 +208,7 @@ function submitForm(e) {
         mensaje += `\n💬 *Comentarios adicionales:*\n${comentarios}\n`;
     }
     
-    mensaje += `\n¿Podemos coordinar una llamada para discutir los detalles?`;
+    mensaje += `\nme puedes ampl iar la información sobre este proyecto? ¡Gracias! 🙌`;
     
     // **NÚMERO DE TELÉFONO DE NODUS**
     const numeroWhatsApp = '573052433816'; // Tu número de WhatsApp
